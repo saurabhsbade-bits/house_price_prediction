@@ -1,29 +1,41 @@
 """
 api/routers/predict.py - Inference endpoints
 """
+
 import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException, status
-from api.schemas import HouseFeaturesRequest, PredictionResponse
-from api.dependencies import get_predictor
-from app.model_inference import PricePredictor
-from app.logger import logger
 
+from api.dependencies import get_predictor
+from api.schemas import HouseFeaturesRequest, PredictionResponse
+from app.logger import logger
+from app.model_inference import PricePredictor
 
 router = APIRouter(tags=["Inference"])
 
 FEATURE_ORDER = [
-    "longitude", "latitude", "housing_median_age", "total_rooms",
-    "total_bedrooms", "population", "households", "median_income",
-    "ocean_proximity_INLAND", "ocean_proximity_ISLAND",
-    "ocean_proximity_NEAR BAY", "ocean_proximity_NEAR OCEAN",
-    "RoomsPerHousehold", "BedroomsPerRoom", "PopulationPerHousehold"
+    "longitude",
+    "latitude",
+    "housing_median_age",
+    "total_rooms",
+    "total_bedrooms",
+    "population",
+    "households",
+    "median_income",
+    "ocean_proximity_INLAND",
+    "ocean_proximity_ISLAND",
+    "ocean_proximity_NEAR BAY",
+    "ocean_proximity_NEAR OCEAN",
+    "RoomsPerHousehold",
+    "BedroomsPerRoom",
+    "PopulationPerHousehold",
 ]
 
 
-@router.post("/predict", response_model=PredictionResponse, status_code=status.HTTP_200_OK)
+@router.post(
+    "/predict", response_model=PredictionResponse, status_code=status.HTTP_200_OK
+)
 def predict_price(
-    payload: HouseFeaturesRequest, 
-    predictor: PricePredictor = Depends(get_predictor)
+    payload: HouseFeaturesRequest, predictor: PricePredictor = Depends(get_predictor)
 ):
     try:
         data = {
@@ -37,8 +49,12 @@ def predict_price(
             "median_income": [payload.median_income],
             "ocean_proximity_INLAND": [1 if payload.ocean_proximity == "INLAND" else 0],
             "ocean_proximity_ISLAND": [1 if payload.ocean_proximity == "ISLAND" else 0],
-            "ocean_proximity_NEAR BAY": [1 if payload.ocean_proximity == "NEAR BAY" else 0],
-            "ocean_proximity_NEAR OCEAN": [1 if payload.ocean_proximity == "NEAR OCEAN" else 0],
+            "ocean_proximity_NEAR BAY": [
+                1 if payload.ocean_proximity == "NEAR BAY" else 0
+            ],
+            "ocean_proximity_NEAR OCEAN": [
+                1 if payload.ocean_proximity == "NEAR OCEAN" else 0
+            ],
         }
         df = pd.DataFrame(data)
         df["RoomsPerHousehold"] = df["total_rooms"] / df["households"]
@@ -50,15 +66,13 @@ def predict_price(
         prediction = predictor.predict(df)[0]
 
         return PredictionResponse(
-            predicted_median_house_value=round(float(prediction), 2),
-            status_code=200
+            predicted_median_house_value=round(float(prediction), 2), status_code=200
         )
-    
+
     except Exception as exc:
         logger.error(f"Inference error handling REST request: {str(exc)}")
-        
+
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Inference calculation failed: {str(exc)}"
+            detail=f"Inference calculation failed: {str(exc)}",
         )
-    

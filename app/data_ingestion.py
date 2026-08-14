@@ -1,8 +1,11 @@
 """
 Data Ingestion
 """
+
 import os
+
 import pandas as pd
+
 from app.logger import logger
 from utils import get_short_path
 
@@ -19,17 +22,17 @@ class DataIngestion:
     def load_dataset(file_path: str) -> pd.DataFrame:
         """
         Load and validate a housing dataset from a CSV file.
-        
+
         Parameters
         ----------
         file_path : str
             Path to the CSV file containing the housing dataset.
-        
+
         Returns
         -------
         pd.DataFrame
             Loaded dataset with 'median_house_value' column renamed to 'MedianHouseValue'.
-        
+
         Raises
         ------
         FileNotFoundError
@@ -38,7 +41,7 @@ class DataIngestion:
             If the loaded dataset is empty.
         Exception
             If CSV parsing fails for any other reason.
-        
+
         Notes
         -----
         - Logs the dataset shape upon successful loading
@@ -51,14 +54,14 @@ class DataIngestion:
         if not os.path.exists(file_path):
             logger.error(f"Dataset file missing at path: {file_path}")
             raise FileNotFoundError(f"Missing required input file: {file_path}")
-        
+
         try:
             df = pd.read_csv(file_path)
 
             if df.empty:
                 logger.warning(f"Loaded dataset from {file_path} is empty!")
                 raise ValueError("Dataset is empty.")
-            
+
             logger.info(f"Successfully loaded dataset with shape: {df.shape}")
 
             return df.rename(columns={"median_house_value": "MedianHouseValue"})

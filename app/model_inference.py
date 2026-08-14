@@ -1,9 +1,12 @@
 """
 Model Loading & Real-time Inference
 """
+
 import joblib
+
 from app.logger import logger
 from utils import get_short_path
+
 
 class PricePredictor:
 
@@ -32,10 +35,9 @@ class PricePredictor:
             scaled_features = self.scaler.transform(feature_df)
             predictions = self.model.predict(scaled_features)
             logger.info(f"Generated {len(predictions)} predictions successfully.")
-            
+
             return predictions
-        
+
         except Exception as e:
             logger.error(f"Inference pipeline execution error: {str(e)}")
             raise ValueError(f"Inference error: {str(e)}")
-        

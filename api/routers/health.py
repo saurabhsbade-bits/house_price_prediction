@@ -1,11 +1,12 @@
 """
 Health check endpoints
 """
-from fastapi import APIRouter, Depends, status
-from api.dependencies import get_predictor
-from api.config import settings
-from app.model_inference import PricePredictor
 
+from fastapi import APIRouter, Depends, status
+
+from api.config import settings
+from api.dependencies import get_predictor
+from app.model_inference import PricePredictor
 
 router = APIRouter(tags=["Health"])
 

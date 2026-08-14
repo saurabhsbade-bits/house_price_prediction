@@ -1,0 +1,28 @@
+STDOUT:
+============================= test session starts =============================
+platform win32 -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\saura\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\saura\OneDrive\Desktop\Saurabh MTech\Sem 2\SEML-2\house_price_prediction
+plugins: anyio-4.14.2
+collecting ... collected 9 items
+
+tests/test_data.py::test_load_dataset_not_found PASSED                   [ 11%]
+tests/test_data.py::test_load_dataset_success PASSED                     [ 22%]
+tests/test_data.py::test_clean_data_imputation_and_encoding PASSED       [ 33%]
+tests/test_data.py::test_engineer_features_creates_derived PASSED        [ 44%]
+tests/test_data_quality.py::test_validate_schema_passes PASSED           [ 55%]
+tests/test_data_quality.py::test_validate_schema_missing_column PASSED   [ 66%]
+tests/test_data_quality.py::test_compute_metrics_and_save PASSED         [ 77%]
+tests/test_ml.py::test_overfit_on_small_batch PASSED                     [ 88%]
+tests/test_ml.py::test_inference_output_shape_and_range PASSED           [100%]
+
+============================== warnings summary ===============================
+tests/test_ml.py: 63 warnings
+  C:\Users\saura\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    array.shape = self.shape
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 9 passed, 63 warnings in 3.17s ========================
+
+STDERR:

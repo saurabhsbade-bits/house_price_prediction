@@ -31,8 +31,12 @@ class ModelTrainer:
         os.makedirs(self.models_dir, exist_ok=True)
         os.makedirs(self.figures_dir, exist_ok=True)
 
-        logger.info(f"Initialized ModelTrainer - Models Dir: {get_short_path(self.models_dir)}")
-        logger.info(f"Initialized ModelTrainer - Figures Dir: {get_short_path(self.figures_dir)}")
+        logger.info(
+            f"Initialized ModelTrainer - Models Dir: {get_short_path(self.models_dir)}"
+        )
+        logger.info(
+            f"Initialized ModelTrainer - Figures Dir: {get_short_path(self.figures_dir)}"
+        )
 
         self.models: Dict[str, Any] = {}
         self.metrics: Dict[str, Dict[str, Any]] = {}
@@ -79,7 +83,7 @@ class ModelTrainer:
     def evaluate_model(
         self, model_name: str, X_test: np.ndarray, y_test: pd.Series
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        
+
         if model_name not in self.models:
             logger.error(f"Model '{model_name}' has not been trained yet.")
             raise ValueError(f"Model '{model_name}' is not available in trainer.")
@@ -114,7 +118,9 @@ class ModelTrainer:
             logger.warning("No models found to dump/persist.")
             return
 
-        logger.info(f"Saving trained models to directory: {get_short_path(self.models_dir)}")
+        logger.info(
+            f"Saving trained models to directory: {get_short_path(self.models_dir)}"
+        )
         for name, model in self.models.items():
             file_path = os.path.join(self.models_dir, f"{name}.joblib")
             try:
@@ -130,7 +136,9 @@ class ModelTrainer:
                 metrics_list = list(self.metrics.values())
                 with open(metrics_path, "w") as f:
                     json.dump(metrics_list, f, indent=2)
-                logger.info(f"Saved evaluation metrics report to: {get_short_path(metrics_path)}")
+                logger.info(
+                    f"Saved evaluation metrics report to: {get_short_path(metrics_path)}"
+                )
             except Exception as e:
                 logger.error(f"Failed to write metrics report: {str(e)}")
                 raise
@@ -201,7 +209,9 @@ class ModelTrainer:
                 )
                 plt.savefig(img_importance_path, dpi=150)
                 plt.close()
-                logger.info(f"Saved feature importances: {get_short_path(img_importance_path)}")
+                logger.info(
+                    f"Saved feature importances: {get_short_path(img_importance_path)}"
+                )
 
             # (c) Model comparison bar chart
             if self.metrics:
@@ -219,7 +229,9 @@ class ModelTrainer:
                 comp_path = os.path.join(self.figures_dir, "model_comparison.png")
                 plt.savefig(comp_path, dpi=150)
                 plt.close()
-                logger.info(f"Saved model comparison chart: {get_short_path(comp_path)}")
+                logger.info(
+                    f"Saved model comparison chart: {get_short_path(comp_path)}"
+                )
 
             # (d) Target distribution after cleaning
             if target_col in df_cleaned.columns:
@@ -229,16 +241,17 @@ class ModelTrainer:
                 plt.xlabel("Median House Value (US$)")
                 plt.ylabel("Frequency")
                 plt.tight_layout()
-                dist_path = os.path.join(
-                    self.figures_dir, "target_distribution.png"
-                )
+                dist_path = os.path.join(self.figures_dir, "target_distribution.png")
                 plt.savefig(dist_path, dpi=150)
                 plt.close()
-                logger.info(f"Saved target distribution chart: {get_short_path(dist_path)}")
+                logger.info(
+                    f"Saved target distribution chart: {get_short_path(dist_path)}"
+                )
 
-            logger.info(f"All figures successfully saved to: {get_short_path(self.figures_dir)}")
+            logger.info(
+                f"All figures successfully saved to: {get_short_path(self.figures_dir)}"
+            )
 
         except Exception as e:
             logger.error(f"Failed to generate visualization figures: {str(e)}")
             raise
-        
